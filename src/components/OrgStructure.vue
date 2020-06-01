@@ -233,6 +233,7 @@
       <v-dialog v-model="show" persistent max-width="600px">
         <v-stepper v-model="pag">
           <v-stepper-items>
+            <!-- mostrar detalles -->
             <v-stepper-content step="1">
               <v-card class="show-text">
                 <v-card-title>
@@ -284,8 +285,8 @@
                         <h6>Permisos:</h6>
                       </div>
                       <div>
-                        <v-btn right small class="primary" fab>
-                          <v-icon @click="openPermission" dark>mdi-plus</v-icon>
+                        <v-btn right x-small class="primary" fab>
+                          <v-icon @click="openPermission('sede')" dark>mdi-plus</v-icon>
                         </v-btn>
                       </div>
                     </div>
@@ -297,7 +298,21 @@
                       dense
                       :items-per-page="5"
                       class="elevation-2"
-                    ></v-data-table>
+                    >
+                      <template v-slot:item.actions="{ item }">
+                        <v-btn
+                          @click="openDeletePermission(item)"
+                          right
+                          width="20"
+                          height="20"
+                          x-small
+                          fab
+                          class="bg-danger"
+                        >
+                          <v-icon color="white">mdi-minus</v-icon>
+                        </v-btn>
+                      </template>
+                    </v-data-table>
                     <v-btn
                       color="primary"
                       @click="openAdmission('Crear Punto de Admision',null,showedItem)"
@@ -317,10 +332,41 @@
                     >Agregar punto de Atenciòn</v-btn>
                   </div>
                   <div v-if="type=='atencion'">
+                    <div class="d-flex mx-5 mb-3 justify-content-between">
+                      <div>
+                        <h6>Permisos:</h6>
+                      </div>
+                      <div>
+                        <v-btn right x-small class="primary" fab>
+                          <v-icon @click="openPermission('attention')" dark>mdi-plus</v-icon>
+                        </v-btn>
+                      </div>
+                    </div>
+
+                    <v-data-table
+                      v-bind="lang"
+                      :headers="headersPermission"
+                      :items="showedItem.permission"
+                      dense
+                      :items-per-page="5"
+                      class="elevation-2"
+                    >
+                      <template v-slot:item.actions="{ item }">
+                        <v-btn
+                          @click="openDeletePermission(item)"
+                          right
+                          width="20"
+                          height="20"
+                          x-small
+                          fab
+                          class="bg-danger"
+                        >
+                          <v-icon color="white">mdi-minus</v-icon>
+                        </v-btn>
+                      </template>
+                    </v-data-table>
                     <br />
                     <v-divider></v-divider>
-                    <br />
-                    <br />
                     <br />
                   </div>
                 </v-card-text>
@@ -330,6 +376,8 @@
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
+
+            <!-- crear editar-->
             <v-stepper-content step="2">
               <v-card>
                 <form action @submit="createAdmOrAtt(editedItem)">
@@ -382,6 +430,8 @@
                 </form>
               </v-card>
             </v-stepper-content>
+
+            <!-- permisos sede -->
             <v-stepper-content step="3">
               <v-card>
                 <v-card-title primary-title>Seleccione Permisos</v-card-title>
@@ -405,19 +455,64 @@
                 </div>
                 <v-data-table
                   v-bind="lang"
+                  v-model="selectItems"
                   :headers="headersPermission"
                   :items="permissionList"
                   dense
                   :items-per-page="5"
                   class="elevation-2"
+                  show-select
+                  item-key="gbl_account_user_id"
                 ></v-data-table>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" @click="close" text>Regresar</v-btn>
-                  <v-btn color="blue darken-1" @click="close" text>Guardar</v-btn>
+                  <v-btn color="blue darken-1" @click="updatePermission" text>Guardar</v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
+
+            <!-- permisos punto de atencion
+            <v-stepper-content step="4">
+              <v-card>
+                <v-card-title primary-title>Seleccione Permisos</v-card-title>
+                <div class="filters-org show" style="margin-bottom: 15px">
+                  <v-text-field
+                    v-model="filterUsername"
+                    append-icon="mdi-magnify"
+                    label="Usuario"
+                    clearable
+                    hide-details
+                    dense
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="filterEntity"
+                    append-icon="mdi-magnify"
+                    label="Entidad"
+                    clearable
+                    hide-details
+                    dense
+                  ></v-text-field>
+                </div>
+                <v-data-table
+                  v-bind="lang"
+                  v-model="selectItems"
+                  :headers="headersPermission"
+                  :items="permissionList"
+                  dense
+                  :items-per-page="5"
+                  class="elevation-2"
+                  show-select
+                  item-key="gbl_account_user_id"
+                ></v-data-table>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" @click="close" text>Regresar</v-btn>
+                  <v-btn color="blue darken-1" @click="updatePermission" text>Guardar</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+            -->
           </v-stepper-items>
         </v-stepper>
       </v-dialog>
@@ -436,6 +531,7 @@
               <span v-if="deleteItem.type=='sede'">esta sede ?</span>
               <span v-if="deleteItem.type=='admision'">este Punto de Admision ?</span>
               <span v-if="deleteItem.type=='atencion'">este Punto de Atención ?</span>
+              <span v-if="deleteItem.type=='permission'">este permiso asignado a esta sede ?</span>
             </v-card-text>
           </div>
 
@@ -449,7 +545,7 @@
     </template>
   </v-card>
 </template>
-
+ 
 
 
 <script>
@@ -484,6 +580,7 @@ export default {
     panel: [],
     panelAdm: [],
     permissionList: [],
+    selectItems: [],
     expand: false,
     editedItem: {},
     showedItem: {},
@@ -621,6 +718,14 @@ export default {
           this.$store.dispatch("deleteAttention", this.deleteItem);
           this.close();
           break;
+        case "permission":
+          this.$store.dispatch("deletePermission", this.deleteItem);
+          this.alertdelete = false;
+          break;
+        case "permissionAttention":
+          this.$store.dispatch("deletePermissionAttention", this.deleteItem);
+          this.alertdelete = false;
+          break;
       }
     },
     showItem(title, type, item) {
@@ -630,13 +735,40 @@ export default {
       this.formTitle = title;
       this.show = true;
     },
-    openPermission() {
+    openPermission(type) {
       this.$store.dispatch("fetchPermission").then(data => {
         this.permissionList = data;
       });
+
       this.pag = 3;
     },
+    updatePermission() {
+      var action =
+        this.type == "sede" ? "updatePermission" : "updatePermissionAttention";
+
+      this.$store.dispatch(action, {
+        id: this.showedItem.id,
+        attention: this.showedItem,
+        items: this.selectItems
+      });
+      this.pag = 1;
+    },
+    openDeletePermission(item) {
+      this.deleteItem = item;
+
+      this.type == "sede"
+        ? (this.deleteItem.type = "permission")
+        : (this.deleteItem.type = "permissionAttention");
+
+      this.type == "sede"
+        ? (this.deleteItem.gbl_org_structure_id = this.showedItem.id)
+        : (this.deleteItem.attention= this.showedItem);
+
+      this.alertdelete = true;
+    },
+
     close() {
+      this.selectItems = [];
       this.alertdelete = false;
       this.createEdit = false;
       this.show = false;
@@ -788,7 +920,14 @@ export default {
           text: "Entidad",
           sortable: true,
           value: "entity_name",
-          width: "70%",
+          width: "60%",
+          filter: this.filterEntityFunction
+        },
+        {
+          text: "",
+          sortable: true,
+          value: "actions",
+          width: "10%",
           filter: this.filterEntityFunction
         }
       ];

@@ -491,7 +491,7 @@
     <!--  -->
 
     <!-- modal -->
-    <template class="modal-selecService">
+    <template class="modal-selectService">
       <v-dialog v-model="serviceForm" persistent max-width="600px">
         <v-card>
           <v-card-title>

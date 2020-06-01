@@ -112,6 +112,38 @@ let mutations = {
         state.orgStructure[indexS]['admission'][indexA]['attention'].splice(indexAT, 1)
     },
 
+    UPDATE_PERMISSION(state, pm){
+        let index = state.orgStructure.findIndex(item => item.id === pm.id)
+        pm.items.forEach(element => {
+            state.orgStructure[index]['permission'].push(element)
+        });
+    },
+
+    DELETE_PERMISSION(state, pm){
+        let index = state.orgStructure.findIndex(item => item.id === pm.gbl_org_structure_id)
+        let indexP = state.orgStructure[index]['permission'].findIndex(item => item.id === pm.gbl_org_structure_allow_id)
+        state.orgStructure[index]['permission'].splice(indexP, 1)
+    },
+
+    UPDATE_PERMISSION_ATTENTION(state, pm){
+        let index = state.orgStructure.findIndex(item => item.id === pm.attention.gbl_org_structure_id)
+        let indexA = state.orgStructure[index]['admission'].findIndex(item => item.id === pm.attention.gbl_admission_point_id)
+        let indexAT = state.orgStructure[index]['admission'][indexA]['attention'].findIndex(item => item.id === pm.id)
+        pm.items.forEach(element => {
+            state.orgStructure[index]['admission'][indexA]['attention'][indexAT]['permission'].push(element)
+        });
+    }, 
+    
+    DELETE_PERMISSION_ATTENTION(state, pm){
+        
+        let index = state.orgStructure.findIndex(item => item.id === pm.attention.gbl_org_structure_id)
+        let indexA = state.orgStructure[index]['admission'].findIndex(item => item.id === pm.attention.gbl_admission_point_id)
+        let indexAT = state.orgStructure[index]['admission'][indexA]['attention'].findIndex(item => item.id === pm.attention.id)
+        let indexP = state.orgStructure[index]['admission'][indexA]['attention'][indexAT]['permission'].findIndex(item => item.id === pm.gbl_attention_point_allow_id)
+     
+            state.orgStructure[index]['admission'][indexA]['attention'][indexAT]['permission'].splice(indexP, 1)
+   
+    },
 
 }
 export default mutations

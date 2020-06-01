@@ -286,7 +286,45 @@ let actions = {
                 console.log(err)
             })
     },
+    updatePermission({commit}, pm){
+        axios.post(`http://localhost:8000/api/permission/`, pm )
+            .then(res =>{
+                commit('UPDATE_PERMISSION', res.data)
+            }).catch(err => {
+                console.log(err)
+            })
+    },
+    deletePermission({ commit }, pm) {
+        axios.delete(`http://localhost:8000/api/permission/${pm.gbl_org_structure_allow_id}`)
+            .then(res => {
+                if (res.data === 'delete'){
+                    commit('DELETE_PERMISSION', pm)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+    }, 
 
+    updatePermissionAttention({commit}, pm){
+        axios.post(`http://localhost:8000/api/permissionAttention`, pm )
+            .then(res =>{
+                commit('UPDATE_PERMISSION_ATTENTION', res.data)
+            }).catch(err => {
+                console.log(err)
+            })
+    },
+    deletePermissionAttention({ commit }, pm) {
+        axios.delete(`http://localhost:8000/api/permissionAttention/${pm.gbl_attention_point_allow_id}`)
+            .then(res => {     
+         
+                if (res.data === 'delete'){
+              
+                commit('DELETE_PERMISSION_ATTENTION', pm)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+    }, 
 
 }
 
