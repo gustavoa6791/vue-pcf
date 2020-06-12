@@ -5,6 +5,7 @@ import ProfileTypePage from '../views/ProfileTypePage.vue'
 import SlotTypePage from '../views/SlotTypePage.vue'
 import SlotTypeDetailsPage from '../views/SlotTypeDetailsPage.vue'
 import OrgStructurePage from '../views/OrgStructurePage.vue'
+import CatalogDocumentPage from '../views/CatalogDocumentPage.vue'
 
 Vue.use(VueRouter)
 
@@ -33,7 +34,12 @@ Vue.use(VueRouter)
       path: '/organizationalStructure',
       name: 'orgstructure',
       component: OrgStructurePage
-  },
+  },  {
+    path: '/catalogDocument',
+    name: 'catalogdocument',
+    component: CatalogDocumentPage
+},
+
 
 ]
 

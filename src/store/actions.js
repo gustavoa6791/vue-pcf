@@ -324,8 +324,43 @@ let actions = {
             }).catch(err => {
                 console.log(err)
             })
-    }, 
+    },
 
+    fetchCatalogDocument({ commit }) {
+        axios.get('http://localhost:8000/api/catalogDocument')
+            .then(res => {
+                commit('FETCH_CATALOG_DOCUMENT', res.data)
+            }).catch(err => {
+                console.log(err)
+            })
+    },
+
+    fetchDocumentType({ commit }) {
+        return axios.get('http://localhost:8000/api/documentType')
+            .then(res => {
+                return res.data
+            }).catch(err => {
+                console.log(err)
+            })
+    },
+    createCatalogDocument({ commit }, cd) {
+        return axios.post('http://localhost:8000/api/catalogDocument', cd)
+            .then(res => {
+                commit('CREATE_CATALOG_DOCUMENT', res.data)
+            }).catch(err => {
+                console.log(err)
+                return err.response.data.errors
+            })
+    },
+    editCatalogDocument({ commit }, cd) {
+        return axios.put(`http://localhost:8000/api/catalogDocument/${cd.id}`, cd)
+            .then(res => {
+                commit('EDIT_CATALOG_DOCUMENT', res.data)
+            }).catch(err => {
+                console.log(err)
+                return err.response.data.errors
+            })
+    },
 }
 
 export default actions

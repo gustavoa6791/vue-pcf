@@ -15,7 +15,8 @@ let state = {
         lang: "es_CO"
     },
     attentionTypes: [],
-    orgStructure:[]
+    orgStructure:[],
+    catalogDocument:[]
     
 }
 

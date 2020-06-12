@@ -62,6 +62,7 @@ export default {
       { icon: "mdi-contacts", text: "Tipos de perfiles", page : "profiletype"},
       { icon: "mdi-microscope", text: "Tipos de consulta" , page : "slottype"},
       { icon: "mdi-file-tree", text: "Estructura organizacional" , page : "orgstructure"},
+       { icon: "mdi-file-document", text: "Catalogo de documentos" , page : "catalogdocument"},
   
     ]
   })

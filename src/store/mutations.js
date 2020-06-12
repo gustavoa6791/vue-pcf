@@ -145,5 +145,16 @@ let mutations = {
    
     },
 
+    FETCH_CATALOG_DOCUMENT(state, cd) {
+        return state.catalogDocument = cd
+    },
+    CREATE_CATALOG_DOCUMENT(state, cd) {
+        state.catalogDocument.unshift(cd)
+    },
+    EDIT_CATALOG_DOCUMENT(state, cd){
+        let index = state.catalogDocument.findIndex(item => item.id === cd.id)
+        state.catalogDocument.splice(index, 1, cd)
+    },
+
 }
 export default mutations

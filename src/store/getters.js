@@ -13,6 +13,9 @@ let getters = {
     },
     orgStructure: state => {
         return state.orgStructure
+    },    
+    catalogDocument: state => {
+        return state.catalogDocument
     }
 }
 
