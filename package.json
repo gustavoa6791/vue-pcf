@@ -21,7 +21,7 @@
     "@vue/cli-plugin-router": "~4.3.0",
     "@vue/cli-plugin-vuex": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
-    "axios": "^0.19",
+    "axios": "^0.21",
     "bootstrap": "^4.4.1",
     "cross-env": "^7.0",
     "node-sass": "^4.12.0",
